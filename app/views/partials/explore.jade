@@ -1,0 +1,56 @@
+form(role="form")
+	div.row
+		div.col-lg-6
+			h4 Entries
+		
+			div.form-group
+				label Education
+				input(
+					type="text",
+					items="all",
+					typeahead="item for item in getItems('entries','education.place',$viewValue)",
+					ng-model="request.education._$elemMatch.place._$regex",
+					class="form-control")
+
+			div.form-group
+				label Occupations
+				input(
+					type="text",
+					items="all",
+					typeahead="item for item in getItems('entries','occupations.title',$viewValue)",
+					ng-model="request.occupations._$elemMatch.title._$regex",
+					class="form-control")
+
+			div.form-group
+				label Free search
+				input(
+					type="text",
+					ng-model="request.narrative._$regex",
+					class="form-control")
+
+		div.col-lg-6
+
+			h4 Visits
+			div.form-group
+				label Place
+				input(
+					type="text",
+					items="all",
+					typeahead="item for item in getItems('visits','place',$viewValue)",
+					ng-model="request.tours._$elemMatch.visits._$elemMatch.place._$regex",
+					class="form-control")
+			
+
+	div.row
+		div.col-lg-12
+			button(class="btn btn-default", ng-click="search()") Submit
+
+div.row
+	div.col-lg-12
+		div.page-header
+			h3 {{entries.length}} Results
+			a(ng-href="/search/{{query}}")
+				pre /search/{{query}}
+		
+		ul.list-unstyled(ng-repeat="entry in entries")
+			li(entry, entry="entry")

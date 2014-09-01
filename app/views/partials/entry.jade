@@ -1,0 +1,117 @@
+div.row
+	
+	div.col-lg-12
+
+		h4 {{entry.name}} 
+			small.text-muted
+				{{entry._id}}
+			
+		div.row
+			div.col-lg-3
+
+				label Information
+
+				table.table.table-bordered.table-condensed(ng-show="entry.birthDate")
+					thead
+						tr
+							th Birth date
+					tbody
+						tr
+							td
+								a(ng-href='/search/{"birthDate":{"$regex": "{{entry.birthDate}}" }}') {{entry.birthDate}}
+
+				table.table.table-bordered.table-condensed(ng-show="entry.deathDate")
+					thead
+						tr
+							th Death date
+					tbody
+						tr
+							td
+								a(ng-href='/search/{"deathDate":{"$regex": "{{entry.deathDate}}" }}') {{entry.deathDate}}
+
+
+				table.table.table-bordered.table-condensed(ng-show="entry.gender")
+					thead
+						tr
+							th Gender
+					tbody
+						tr
+							td
+								a(ng-href='/search/{"gender":{"$regex": "{{entry.gender}}" }}') {{entry.gender}}
+
+				table.table.table-bordered.table-condensed(ng-show="entry.marriages.length")
+					thead
+						tr
+							th Marriages
+					tbody
+						tr(ng-repeat="marriage in entry.marriages")
+							td
+								a(ng-href='/search/{ "marriages": { "$elemMatch" : { "spouse" :{ "$regex": "{{marriage.spouse}}" }}}}') {{marriage.spouse}}
+
+
+				table.table.table-bordered.table-condensed(ng-show="entry.education.length")
+					thead
+						tr
+							th Education
+					tbody
+						tr(ng-repeat="education in entry.education")
+							td
+								a(ng-href='/search/{ "education": { "$elemMatch" : { "place" :{ "$regex": "{{education.place}}" }}}}') {{education.place}}
+
+				table.table.table-bordered.table-condensed(ng-show="entry.occupations.length")
+					thead
+						tr
+							th Occupations
+					tbody
+						tr(ng-repeat="occupation in entry.occupations")
+							td
+								a(ng-href='/search/{ "occupations": { "$elemMatch" : { "title" :{ "$regex": "{{occupation.title}}" }}}}') {{occupation.title}}
+
+				table.table.table-bordered.table-condensed(ng-show="entry.associations.length")
+					thead
+						tr
+							th Groups
+					tbody
+						tr(ng-repeat="association in entry.associations")
+							td 
+								a(ng-href='/search/{ "associations": { "$elemMatch" : { "groupName" :{ "$regex": "{{association.groupName}}" }}}}') {{association.groupName}}
+
+				table.table.table-bordered.table-condensed(ng-show="entry.references.length")
+					thead
+						tr
+							th References
+					tbody
+						tr(ng-repeat="reference in entry.references")
+							td {{reference.reference}}
+
+			div.col-lg-6
+
+				label Entry
+
+				p.serif {{entry.bio.join("; ")}}
+				//p.serif {{entry.tours | map:'raw':' ' }}
+				p.serif {{entry.narrative}}
+				p.serif
+					small {{entry.notes}}
+
+			div.col-lg-3.sans
+				label Tours
+
+				div(ng-repeat="tour in entry.tours")
+
+					div.map(map, points="tour.visits")
+
+					table.table.table-hover.table-bordered.table-condensed
+						thead
+							tr
+								th(colspan="3") Tour {{$index + 1}} ({{tour.startDate.from}}-{{tour.endDate.from}})
+						tbody
+							tr.text-muted
+								td Place
+								td From
+								td To
+							tr(ng-repeat="travel in tour.visits")
+								td.place(ng-class="{secondary:travel.parent}")
+									a(ng-href='/search/{ "tours": { "$elemMatch": { "visits" : { "$elemMatch" : { "place" : { "$regex" : "{{travel.place}}" } }}}}}') {{travel.place}}
+								td(ng-class="{secondary:travel.parent}") {{travel.startDate.raw}}
+								td(ng-class="{secondary:travel.parent}") {{travel.endDate.raw}}

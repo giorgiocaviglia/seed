@@ -1,0 +1,141 @@
+label Query
+pre.text-muted /search/{{sanitize(request)}}
+
+div.row
+	div.col-lg-5
+
+		form(role="form")
+			div.row
+				div.col-lg-12
+					h4 Entries
+					
+					div.form-group
+						label Name
+						input(
+							type="text",
+							items="all",
+							typeahead="item for item in getItems('entries','name',$viewValue)",
+							typeahead-min-length="2",
+							ng-model="request.name._$regex",
+							class="form-control")
+
+					div.row
+						div.col-lg-6
+							div.form-group
+								label Birth Date
+								input(
+									type="text",
+									items="all",
+									typeahead="item for item in getItems('entries','birthDate',$viewValue)",
+									ng-model="request.birthDate._$regex",
+									class="form-control")
+
+						div.col-lg-6
+							div.form-group
+								label Death Date
+								input(
+									type="text",
+									items="all",
+									typeahead="item for item in getItems('entries','deathDate',$viewValue)",
+									ng-model="request.deathDate._$regex",
+									class="form-control")
+
+					div.form-group
+						label Gender
+						input(
+							type="text",
+							items="all",
+							typeahead="item for item in getItems('entries','gender',$viewValue)",
+							ng-model="request.gender._$regex",
+							class="form-control")
+
+					div.form-group
+						label Education
+						input(
+							type="text",
+							items="all",
+							typeahead="item for item in getItems('entries','education.place',$viewValue)",
+							ng-model="request.education._$elemMatch.place._$regex",
+							class="form-control")
+
+					div.form-group
+						label Occupations
+						input(
+							type="text",
+							items="all",
+							typeahead="item for item in getItems('entries','occupations.title',$viewValue)",
+							ng-model="request.occupations._$elemMatch.title._$regex",
+							class="form-control")
+
+					div.form-group
+						label Associations
+						input(
+							type="text",
+							items="all",
+							typeahead="item for item in getItems('entries','associations.groupName',$viewValue)",
+							ng-model="request.associations._$elemMatch.groupName._$regex",
+							class="form-control")
+
+					div.form-group
+						label Free search
+						input(
+							type="text",
+							ng-model="request.narrative._$regex",
+							class="form-control")
+
+					h4 Visits
+					div.form-group
+						label Place
+						input(
+							type="text",
+							items="all",
+							typeahead="item for item in getItems('visits','place',$viewValue)",
+							ng-model="request.tours._$elemMatch.visits._$elemMatch.place._$regex",
+							class="form-control")
+					
+					div.row
+						div.col-lg-4
+
+							div.form-group
+								label Start date (year)
+								input(
+									type="number",
+									ng-model="request.tours._$elemMatch.visits._$elemMatch['startDate.year']",
+									class="form-control")
+						div.col-lg-4
+
+							div.form-group
+								label Start date (month)
+								input(
+									type="number",
+									ng-model="request.tours._$elemMatch.visits._$elemMatch['startDate.month']",
+									class="form-control")
+						div.col-lg-4
+
+							div.form-group
+								label Start date (day)
+								input(
+									type="number",
+									ng-model="request.tours._$elemMatch.visits._$elemMatch['startDate.day']",
+									class="form-control")
+						
+
+			div.row
+				div.col-lg-12
+					button(class="btn btn-default", ng-click="submit()") Submit
+
+	//a(ng-href="/search/{{sanitize(request)}}")
+	
+
+	div.col-lg-7
+		h4 {{count}} Results
+		
+		p(ng-show="loading") Loading...				
+	
+		ul.list-unstyled(ng-repeat="entry in entries")
+			li 
+				p
+					strong
+						a(ng-href="/entries/{{entry._id}}") {{entry.name[0]}} 
+					br						
+					span.small.text-muted {{entry.bio[0].join("; ")}}
