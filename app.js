@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var debug = require('debug')('app4');
 var mongoose = require('mongoose');
 var fs = require('fs');
+var basicAuth = require('basic-auth-connect');
 
 
 // Bootstrap Mongo models
@@ -35,8 +36,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
+// authenticator
+app.use(basicAuth('grandtour', 'johnadams'));
 
 // Bootstrap routes
 require('./config/routes')(app);
