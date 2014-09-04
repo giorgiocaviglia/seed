@@ -371,6 +371,8 @@ Example
 
 ```javascript
 	{
+		"raw" : "1767 Venice (10 Sep.: 'Giovanni Adam di Andrea'; ASV IS 759). Possibly also the 'Sig Hadam' who arrived in Florence from Leghorn on 1 March 1767 (Gazz.Tosc.).",
+		"entry" : ObjectId("5408b086e728c70000927067"),
 		"visits" : [
 			{
 				"__v" : 0,
