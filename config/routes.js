@@ -27,7 +27,7 @@ module.exports = function (app) {
 	app.post('/api/visits/search', visits.search)
 
 	app.post('/api/search', collection.search);
-
+	app.post('/api/download', collection.download);
 
 	// redirect all others to the index (HTML5 history)
 	app.get('*', function (req, res){

@@ -14,7 +14,7 @@ angular.module('myApp', [
 config(function ($routeProvider, $locationProvider) {
   $routeProvider.
     when('/', {
-      templateUrl: 'partials/entries',
+      templateUrl: 'partials/about',
       controller: 'IndexCtrl'
     }).
     when('/search', {

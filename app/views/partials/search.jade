@@ -1,5 +1,10 @@
-label Query
-pre.text-muted /search/{{sanitize(request)}}
+div.row
+	div.col-lg-12
+		label Query
+		pre.text-muted
+			a(ng-href="/search/{{sanitize(request)}}") /search/{{sanitize(request)}}
+
+		button.btn.btn-primary.pull-right(ng-click="download()", ng-show="entries.length") Export result as .csv
 
 div.row
 	div.col-lg-5
@@ -8,10 +13,14 @@ div.row
 			div.row
 				div.col-lg-12
 					h4 Entries
+
+					div.row
+						div.col-lg-12
+							a.pull-right(ng-click="clear()") Clear all
 					
 					div.form-group
 						label Name
-						input(
+						input.input-sm(
 							type="text",
 							items="all",
 							typeahead="item for item in getItems('entries','name',$viewValue)",
@@ -23,7 +32,7 @@ div.row
 						div.col-lg-6
 							div.form-group
 								label Birth Date
-								input(
+								input.input-sm(
 									type="text",
 									items="all",
 									typeahead="item for item in getItems('entries','birthDate',$viewValue)",
@@ -33,7 +42,7 @@ div.row
 						div.col-lg-6
 							div.form-group
 								label Death Date
-								input(
+								input.input-sm(
 									type="text",
 									items="all",
 									typeahead="item for item in getItems('entries','deathDate',$viewValue)",
@@ -42,7 +51,7 @@ div.row
 
 					div.form-group
 						label Gender
-						input(
+						input.input-sm(
 							type="text",
 							items="all",
 							typeahead="item for item in getItems('entries','gender',$viewValue)",
@@ -51,7 +60,7 @@ div.row
 
 					div.form-group
 						label Education
-						input(
+						input.input-sm(
 							type="text",
 							items="all",
 							typeahead="item for item in getItems('entries','education.place',$viewValue)",
@@ -60,7 +69,7 @@ div.row
 
 					div.form-group
 						label Occupations
-						input(
+						input.input-sm(
 							type="text",
 							items="all",
 							typeahead="item for item in getItems('entries','occupations.title',$viewValue)",
@@ -69,7 +78,7 @@ div.row
 
 					div.form-group
 						label Associations
-						input(
+						input.input-sm(
 							type="text",
 							items="all",
 							typeahead="item for item in getItems('entries','associations.groupName',$viewValue)",
@@ -78,7 +87,7 @@ div.row
 
 					div.form-group
 						label Free search
-						input(
+						input.input-sm(
 							type="text",
 							ng-model="request.narrative._$regex",
 							class="form-control")
@@ -86,7 +95,7 @@ div.row
 					h4 Visits
 					div.form-group
 						label Place
-						input(
+						input.input-sm(
 							type="text",
 							items="all",
 							typeahead="item for item in getItems('visits','place',$viewValue)",
@@ -98,7 +107,7 @@ div.row
 
 							div.form-group
 								label Start date (year)
-								input(
+								input.input-sm(
 									type="number",
 									ng-model="request.tours._$elemMatch.visits._$elemMatch['startDate.year']",
 									class="form-control")
@@ -106,7 +115,7 @@ div.row
 
 							div.form-group
 								label Start date (month)
-								input(
+								input.input-sm(
 									type="number",
 									ng-model="request.tours._$elemMatch.visits._$elemMatch['startDate.month']",
 									class="form-control")
@@ -114,7 +123,7 @@ div.row
 
 							div.form-group
 								label Start date (day)
-								input(
+								input.input-sm(
 									type="number",
 									ng-model="request.tours._$elemMatch.visits._$elemMatch['startDate.day']",
 									class="form-control")
@@ -122,7 +131,7 @@ div.row
 
 			div.row
 				div.col-lg-12
-					button(class="btn btn-default", ng-click="submit()") Submit
+					button.btn.btn-primary(ng-click="submit()") Submit
 
 	//a(ng-href="/search/{{sanitize(request)}}")
 	

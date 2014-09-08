@@ -169,8 +169,75 @@ angular.module('myApp.controllers', [])
       })
     }
 
+    $scope.clear = function(){
+      $scope.request = {};
+    }
+
+    $scope.download = function(){
+
+      apiService.cleanRequest($scope.request);
+      var request = {
+        query: JSON.parse($scope.sanitize($scope.request)),
+        skip: $scope.skip,
+        limit: $scope.limit
+      }
+      $http.post('api/download', JSON.stringify(request))
+        .then(function (res){
+          
+          var entries = toCSV(res.data.response.entries);
+          var visits = toCSV(res.data.response.visits);
+          var places = toCSV(res.data.response.places);
+
+          var zip = new JSZip();
+          var folder = zip.folder("Grand Tour data export");
+          folder.file("Entries.csv", entries);
+          folder.file("Visits.csv", visits);
+          folder.file("Places.csv", places);
+          var content = zip.generate({type:"blob"});
+          saveAs(content, "Grand Tour Export.zip");
+      })
+
+      
+    
+    }
+
     $scope.sanitize = function(obj) {
       return JSON.stringify(sanitize(obj))
+    }
+
+    function CSVEscape(field) {
+      return '"' + String(field || "").replace(/\"/g, '""') + '"';
+    }
+
+    function toCSV(objArray) {
+
+      var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+
+      var str = '';
+      var line = '';
+
+      var head = array[0];
+      for (var index in array[0]) {
+          var value = index + "";
+          line += '"' + value.replace(/"/g, '""') + '",';
+      }
+      
+      line = line.slice(0, -1);
+      str += line + '\r\n';
+      
+      for (var i = 0; i < array.length; i++) {
+        var line = [];
+
+        for (var index in array[i]) {
+            var value = array[i][index] == null || array[i][index].length == 0 ? "" : array[i][index] + "";
+            line.push(value.length ? '"' + value.replace(/"/g, '""') + '"' : "")
+        }
+        line = line.join(",")
+        str += line + '\r\n';
+      }
+      
+      return str;
+          
     }
 
     function sanitize(obj) {

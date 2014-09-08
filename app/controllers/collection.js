@@ -1073,24 +1073,106 @@ exports.search = function (req, res) {
 
     })
 
+}
+
+
+function CSVEscape(field) {
+  return '"' + String(field || "").replace(/\"/g, '""') + '"';
+}
+
+function entriesJSON(entry){
+
+  var json = {};
+
+  json.id = entry._id;
+  json.name = entry.name;
+  json.aliases = entry.aliases.join("; ");
+  json.bio = entry.bio.join("; ");
+  json.narrative = entry.narrative;
+  json.notes = entry.notes;
+  json.noteReferences = entry.noteReferences.map(function(d){ return d.title; }).join("; ");
+  json.gender = entry.gender || null;
+  json.occupations = entry.occupations.map(function(d){ return d.title; }).join("; ");
+  json.parents = entry.parents;
+  json.successions = entry.successions.map(function(d){ return d.relativeLong + " as " +d.title + " (" + d.year + ")" ; }).join("; ");
+  json.education = entry.education.map(function(d){ return d.place; }).join("; ");
+  json.associations = entry.associations.map(function(d){ return d.groupName; }).join("; ");
+  json.references = entry.references.map(function(d){ return d.reference; }).join("; ");
+  json.birthDate = entry.birthDate;
+  json.deathDate = entry.deathDate;
+  json.flourishedStart = entry.flourishedStart;
+  json.flourishedEnd = entry.flourishedEnd;
+  json.marriages = entry.marriages.map(function(d){ return d.spouse + " (" + d.year + ")"; }).join("; ");
   
+  var visits = [];
+  entry.tours.forEach(function(tour){
+    visits = visits.concat(tour.visits.map(function(d){ return d._id; }) );
+  })
 
+  json.visits = visits.join(";");
 
+  return json;
+}
 
-  /*Entry
-    .find(sanitize(req.body))
-    .limit(10)
-    //.limit(10)
-    .exec(function (err, response) {
-      if (err) {
+function visitsJSON(entries) {
+
+  var visits = [];
+  var places = {};
+
+  entries.forEach(function(entry){
+
+    entry.tours.forEach(function(tour, tourIndex){
+
+      visits = visits.concat(tour.visits.map(function (visit){ 
+        
+        var json = {};
+
+        json._id = visit._id;
+        json.entry = visit.entry;
+        json.entryName = visit.entryName;
+        json.raw = visit.raw;
+        json.tour = tourIndex + 1;
+        json.sequence = visit.sequence + 1;
+        json.startDate = visit.startDate.year ? visit.startDate.year + "-" + visit.startDate.month + "-" + visit.startDate.day : null;
+        json.endDate = visit.endDate.year ? visit.endDate.year + "-" + visit.endDate.month + "-" + visit.endDate.day : null;
+        json.place = visit.place;
+        json.isChild = visit.parent != null;
+
+        if (visit.coordinates && !places[visit.place]) places[visit.place] = visit.coordinates.lat + "," + visit.coordinates.lng;
+
+        return json; 
+
+      }) );
+
+    })
+
+  })
+
+  return [visits,d3.entries(places).map(function(d){ return { place: d.key, coordinates: d.value} })];
+
+}
+
+exports.download = function (req, res) {
+
+    Entry
+      .find(sanitize(req.body.query))
+      .exec(function (err, response) {
+        if (err) {
+          res.json({ error: err })
+          return;
+        }
+
+        var visits = visitsJSON(response);
+
         res.json({
-          error:err
-        })
-        return;
-      }
-      res.json({
-        response:response
-      });
-    })*/
+          response: {
+            entries: response.map(entriesJSON),
+            visits: visits[0],
+            places : visits[1]
+
+          }
+        });
+      })
+
 
 }
