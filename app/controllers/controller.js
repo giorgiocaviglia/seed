@@ -1,6 +1,5 @@
 // Parsing the text
-var config = require('../../config/config')
-//,	mongoose = require('mongoose')
+//var mongoose = require('mongoose')
 
 
 exports.test = function (req, res) {
