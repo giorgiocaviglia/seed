@@ -20,6 +20,4 @@ module.exports = function (app, config) {
   //app.use(express.methodOverride());
   app.use(express.static(config.root + '/public'));
   
-  //app.use(app.router);
-
 }

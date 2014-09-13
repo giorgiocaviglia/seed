@@ -17,7 +17,7 @@ fs.readdirSync(models_path).forEach(function (file) {
 })
 
 // db connection
-mongoose.connect("mongodb://localhost/gt")
+//mongoose.connect("mongodb://localhost/gt")
 
 // express app
 var app = express();
@@ -35,9 +35,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 // authenticator
-app.use(basicAuth('grandtour', 'johnadams'));
+// app.use(basicAuth('name', 'password'));
 
 // Bootstrap routes
 require('./config/routes')(app);

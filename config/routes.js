@@ -1,7 +1,5 @@
 // controllers
-var collection = require('../app/controllers/collection')
-	,	entries = require('../app/controllers/entries')
-	,	visits = require('../app/controllers/visits')
+var controller = require('../app/controllers/controller')
 
 module.exports = function (app) {
 
@@ -15,19 +13,8 @@ module.exports = function (app) {
   		res.render('partials/' + name);
 	});
 
-	// collection
-	//app.get('/api/collection', collection.index)
-	app.get('/api/collection/reset', collection.reset);
-
-	// entries
-	app.post('/api/entries', entries.index)
-	app.post('/api/entries/search', entries.search)
-
-	// visits
-	app.post('/api/visits/search', visits.search)
-
-	app.post('/api/search', collection.search);
-	app.post('/api/download', collection.download);
+	// test
+	app.get('/api/controller', controller.test);
 
 	// redirect all others to the index (HTML5 history)
 	app.get('*', function (req, res){
